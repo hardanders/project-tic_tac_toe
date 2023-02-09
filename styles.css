@@ -1,0 +1,77 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gameSelect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 1rem;
+    z-index: 1;
+}
+
+.header {
+    font-size: 2rem;
+    font-weight: bold;
+
+}
+
+.btnCon {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+}
+
+.playBtn,
+.playAIBtn {
+    padding: 8px 32px;
+    background-color: darkseagreen;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+}
+
+.gameSpace {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    height: auto;
+    width: auto;
+    z-index: 2;
+}
+
+.tile {
+    height: 8rem;
+    width: 8rem;
+    background-color:seagreen;
+    border: 2px solid gray;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+    color: white;
+}
+
+.hidden {
+    display: none;
+    max-height: none;
+}
