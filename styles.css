@@ -32,17 +32,38 @@ body {
 }
 
 .playBtn,
-.playAIBtn {
+.playAIBtn,
+.submit {
     padding: 8px 32px;
     background-color: darkseagreen;
     border-radius: 10px;
     border: none;
     font-size: 2rem;
+    max-height: 4rem;
 }
 
 .playBtn:hover,
-.playAIBtn:hover {
+.submit:hover {
     cursor: pointer;
+}
+
+.playAIBtn {
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.playAIBtn:hover {
+    cursor: not-allowed;
+}
+
+.main-text {
+    font-size: 1.5rem;
+}
+
+.subtext {
+    font-size: .75rem;
 }
 
 .input-con {
@@ -58,9 +79,14 @@ body {
     gap: 2rem;
 }
 
+.input-header {
+    font-size: 5rem;
+}
+
 .names {
     display: flex;
     gap: 3rem;
+    font-size: 2rem;
 }
 
 .gameSpace {
@@ -70,13 +96,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 5rem;
 }
 
 .playerDisplay {
     height: 5rem;
     width: 30rem;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+
+    font-size: 32px;
 }
 
 .grid {
@@ -86,6 +115,7 @@ body {
     height: auto;
     width: auto;
     z-index: 2;
+    cursor: pointer;
 }
 
 .tile {
@@ -98,11 +128,15 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 64px;
+    font-size: 11rem;
     color: white;
 }
 
 .hidden {
     display: none;
     max-height: none;
+}
+
+.highlight {
+    background-color: rgba(255, 255, 0, 0.25);
 }

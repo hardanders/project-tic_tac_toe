@@ -1,6 +1,11 @@
-let player1, player2;
+let player1, player2, currentPlayer;
 
 const Gameboard = (function() {
+    const changePlayer = function() {
+        (currentPlayer == 1) ? currentPlayer = 2 : currentPlayer = 1;
+        
+    }
+
     const Player = (name, icon) => {
         name = (() => {
             if (player1 == undefined && !name) {
@@ -11,7 +16,6 @@ const Gameboard = (function() {
                 return name;
             }
         })();
-
         return { name, icon }
     };
 
@@ -20,6 +24,7 @@ const Gameboard = (function() {
         const p2Name = document.querySelector('#p2Name').value
         player1 = Player(p1Name, 'X')
         player2 = Player(p2Name, 'O')
+        changePlayer()
     };
 
     const generateBoard = () => {
@@ -35,14 +40,20 @@ const Gameboard = (function() {
     };
 
     const inputIcon = (e) => {
-        e.target.innerHTML = currentPlayer.icon
+        if (e.target.innerHTML != '') {
+            return;
+        } else if (currentPlayer == 1) {
+            e.target.innerHTML = player1.icon;
+        } else {
+            e.target.innerHTML = player2.icon;
+        }
+        changePlayer();
     };
 
     return {
         generateBoard,
         assignPlayer,
-        player1,
-        player2
+        inputIcon
     };
 })();
 
@@ -80,8 +91,8 @@ const DisplayController = (function() {
         const playAIBtn = document.querySelector(".playAIBtn");
 
         for (i = 0; i < tiles.length; i++) {
-            tiles[i].addEventListener("click", function() {
-                this.innerHTML = "X";
+            tiles[i].addEventListener("click", function(e) {
+                Gameboard.inputIcon(e);
             })
         }
 
