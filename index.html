@@ -14,11 +14,29 @@
             TIC-TAC-TOE!!
         </div>
         <div class="btnCon">
-            <button class="playBtn">Play!</button>
+            <button class="playBtn">Play local!</button>
             <button class="playAIBtn">Play with AI!</button>
         </div>
     </div>
-    <div class="gameSpace" class="">
+    <form class="input-con hidden">
+        <div class="input-header">What are your names?</div>
+        <div class="names">
+            <div>
+                <label for="p1Name">Player 1:</label>
+                <input type="text" id="p1Name" name="p1Name">
+            </div>
+            <div>
+                <label for="p2Name">Player 2:</label>
+                <input type="text" id="p2Name" name="p2Name">
+            </div>
+        </div>
+        <button onclick="" class="submit">SUBMIT!</button>
+    </form>
+    <div class="gameSpace hidden" class="">
+        <div class="playerDisplay">
+            <div class="p1Score"></div>
+            <div class="p2Score"></div>
+        </div>
         <div class="grid"></div>
     </div>
 </body>
