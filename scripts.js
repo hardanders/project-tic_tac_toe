@@ -1,11 +1,6 @@
 let player1, player2, currentPlayer;
 
 const Gameboard = (function() {
-    const changePlayer = function() {
-        (currentPlayer == 1) ? currentPlayer = 2 : currentPlayer = 1;
-        
-    }
-
     const Player = (name, icon) => {
         name = (() => {
             if (player1 == undefined && !name) {
@@ -16,15 +11,25 @@ const Gameboard = (function() {
                 return name;
             }
         })();
-        return { name, icon }
+        return { name, icon };
+    };
+
+    const changePlayer = () => {
+        (currentPlayer == player1) ? currentPlayer = player2 : currentPlayer = player1;
+        
     };
 
     const assignPlayer = () => {
-        const p1Name = document.querySelector('#p1Name').value
-        const p2Name = document.querySelector('#p2Name').value
-        player1 = Player(p1Name, 'X')
-        player2 = Player(p2Name, 'O')
-        changePlayer()
+        const p1Name = document.querySelector('#p1Name').value;
+        const p2Name = document.querySelector('#p2Name').value;
+        player1 = Player(p1Name, 'X');
+        player2 = Player(p2Name, 'O');
+        currentPlayer = player1;
+    };
+
+    const showNameDisplay = () => {
+        let p1Field = document.querySelector('#p1Score');
+        console.log(p1Field);
     };
 
     const generateBoard = () => {
@@ -42,23 +47,21 @@ const Gameboard = (function() {
     const inputIcon = (e) => {
         if (e.target.innerHTML != '') {
             return;
-        } else if (currentPlayer == 1) {
-            e.target.innerHTML = player1.icon;
         } else {
-            e.target.innerHTML = player2.icon;
-        }
-        changePlayer();
+            e.target.innerHTML = currentPlayer.icon;
+        };
     };
 
     return {
         generateBoard,
         assignPlayer,
-        inputIcon
+        inputIcon,
+        changePlayer,
+        showNameDisplay
     };
 })();
 
 const DisplayController = (function() {
-
     const toggleHeader = (function() {
         const gameSelect = document.getElementsByClassName("gameSelect");
         gameSelect[0].classList.toggle('hidden');
@@ -74,11 +77,6 @@ const DisplayController = (function() {
         gameSpace[0].classList.toggle('hidden');
     });
 
-    const setNameDisplay = (function() {
-        document.querySelector('.p1Score').textContent = `${player1.name} : ${player1.icon}`;
-        document.querySelector('.p2Score').textContent = `${player2.name} : ${player2.icon}`;
-    })
-
     const addListeners = (function() {
         const tiles = document.querySelectorAll(".tile");
         const playBtn = document.querySelector(".playBtn");
@@ -86,28 +84,26 @@ const DisplayController = (function() {
         playBtn.addEventListener("click", function() {
             toggleHeader();
             toggleInputs();
-        })
+        });
 
         const playAIBtn = document.querySelector(".playAIBtn");
 
         for (i = 0; i < tiles.length; i++) {
             tiles[i].addEventListener("click", function(e) {
                 Gameboard.inputIcon(e);
-            })
-        }
+                Gameboard.changePlayer();
+            });
+        };
 
         submitBtn.addEventListener('click', function(e) {
             Gameboard.assignPlayer();
             toggleInputs();
             toggleGamespace();
             Gameboard.generateBoard();
-            setNameDisplay();
             addListeners();
             e.preventDefault();
-        })
+        });
     });
-
-
     return {
         addListeners
     }
