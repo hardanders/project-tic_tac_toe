@@ -33,7 +33,8 @@ body {
 
 .playBtn,
 .playAIBtn,
-.submit {
+.submit,
+.restart {
     padding: 8px 32px;
     background-color: darkseagreen;
     border-radius: 10px;
@@ -87,6 +88,13 @@ body {
     display: flex;
     gap: 3rem;
     font-size: 2rem;
+    align-items: center;
+}
+
+.input-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .gameSpace {
@@ -121,7 +129,7 @@ body {
 .tile {
     height: 8rem;
     width: 8rem;
-    background-color:seagreen;
+    background-color:darkseagreen;
     border: 2px solid gray;
 
     display: flex;
@@ -132,7 +140,8 @@ body {
     color: white;
 }
 
-.pScore {
+#p1Score,
+#p2Score {
     display: flex;
     align-items: center;
     padding: 0px 10px;
@@ -144,5 +153,11 @@ body {
 }
 
 .highlight {
-    background-color: rgba(46, 139, 87, 0.582);
+    background-color: darkseagreen;
+}
+
+input[type="text"] {
+    height: 2rem;
+    width: 12rem;
+    font-size: 1.75rem;
 }

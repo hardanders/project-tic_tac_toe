@@ -11,12 +11,26 @@ const Gameboard = (function() {
                 return name;
             }
         })();
-        return { name, icon };
+
+        let moves = [];
+        return { name, icon, moves };
     };
 
     const changePlayer = () => {
-        (currentPlayer == player1) ? currentPlayer = player2 : currentPlayer = player1;
-        
+        const p1Score = document.querySelector('#p1Score')
+        const p2Score = document.querySelector('#p2Score')
+        if (currentPlayer == undefined) {
+            currentPlayer = player1;
+            p1Score.classList.toggle('highlight');
+        } else if (currentPlayer == player1){
+            currentPlayer = player2;
+            p1Score.classList.toggle('highlight');
+            p2Score.classList.toggle('highlight');
+        } else if (currentPlayer == player2) {
+            currentPlayer = player1;
+            p2Score.classList.toggle('highlight');
+            p1Score.classList.toggle('highlight')
+        }
     };
 
     const assignPlayer = () => {
@@ -24,12 +38,14 @@ const Gameboard = (function() {
         const p2Name = document.querySelector('#p2Name').value;
         player1 = Player(p1Name, 'X');
         player2 = Player(p2Name, 'O');
-        currentPlayer = player1;
+        changePlayer();
+        generateBoard();
+        setNameDisplay();
     };
 
-    const showNameDisplay = () => {
-        let p1Field = document.querySelector('#p1Score');
-        console.log(p1Field);
+    const setNameDisplay = () => {
+        document.querySelector("#p1Score").textContent = `${player1.name} : ${player1.icon}`;
+        document.querySelector("#p2Score").textContent = `${player2.name} : ${player2.icon}`;
     };
 
     const generateBoard = () => {
@@ -44,38 +60,36 @@ const Gameboard = (function() {
         }
     };
 
-    const inputIcon = (e) => {
-        if (e.target.innerHTML != '') {
-            return;
-        } else {
-            e.target.innerHTML = currentPlayer.icon;
-        };
-    };
-
     return {
-        generateBoard,
         assignPlayer,
-        inputIcon,
-        changePlayer,
-        showNameDisplay
+        changePlayer
     };
 })();
 
 const DisplayController = (function() {
+
     const toggleHeader = (function() {
-        const gameSelect = document.getElementsByClassName("gameSelect");
-        gameSelect[0].classList.toggle('hidden');
+        document.querySelector(".gameSelect").classList.toggle('hidden');
     });
 
     const toggleInputs = (function() {
-        const inputCon = document.getElementsByClassName("input-con");
-        inputCon[0].classList.toggle('hidden');
+        document.querySelector(".input-con").classList.toggle('hidden');
     });
 
     const toggleGamespace = (function() {
-        const gameSpace = document.getElementsByClassName("gameSpace");
-        gameSpace[0].classList.toggle('hidden');
+        document.querySelector(".gameSpace").classList.toggle('hidden');
     });
+
+    const inputIcon = (e) => {
+        let movesMade = e.target.classList[1]
+        if (e.target.innerHTML != '') {
+            ;
+        } else {
+            e.target.innerHTML = currentPlayer.icon;
+            currentPlayer.moves.push(movesMade);
+        };
+        Gameboard.changePlayer();
+    };
 
     const addListeners = (function() {
         const tiles = document.querySelectorAll(".tile");
@@ -90,8 +104,7 @@ const DisplayController = (function() {
 
         for (i = 0; i < tiles.length; i++) {
             tiles[i].addEventListener("click", function(e) {
-                Gameboard.inputIcon(e);
-                Gameboard.changePlayer();
+                inputIcon(e);
             });
         };
 
@@ -99,7 +112,6 @@ const DisplayController = (function() {
             Gameboard.assignPlayer();
             toggleInputs();
             toggleGamespace();
-            Gameboard.generateBoard();
             addListeners();
             e.preventDefault();
         });
