@@ -1,4 +1,4 @@
-let player1, player2, currentPlayer;
+let player1, player2, currentPlayer, winner;
 
 const Gameboard = (function() {
     const Player = (name, icon) => {
@@ -11,9 +11,28 @@ const Gameboard = (function() {
                 return name;
             }
         })();
-
         let moves = [];
+
         return { name, icon, moves };
+    };
+    
+    const determineWinner = () => {
+        let moves = Array(currentPlayer.moves);
+        const winConditions = [
+                ["a0", "a1", "a2"],
+                ["a3", "a4", "a5"],
+                ["a6", "a7", "a8"],
+                ["a0", "a3", "a6"],
+                ["a1", "a4", "a7"],
+                ["a2", "a5", "a8"],
+                ["a0", "a4", "a8"],
+                ["a2", "a4", "a6"]
+            ];
+        winConditions.forEach((condition) => {
+            if (condition.toString() == moves.toString()) {
+                winner = currentPlayer;
+            }
+        });
     };
 
     const changePlayer = () => {
@@ -62,7 +81,8 @@ const Gameboard = (function() {
 
     return {
         assignPlayer,
-        changePlayer
+        changePlayer,
+        determineWinner
     };
 })();
 
@@ -83,13 +103,21 @@ const DisplayController = (function() {
     const inputIcon = (e) => {
         let movesMade = e.target.classList[1]
         if (e.target.innerHTML != '') {
-            ;
+            return;
         } else {
             e.target.innerHTML = currentPlayer.icon;
             currentPlayer.moves.push(movesMade);
+            currentPlayer.moves.sort();
         };
+        Gameboard.determineWinner();
         Gameboard.changePlayer();
     };
+
+    const setWinner = () => {
+        if (winner) {
+            
+        }
+    }
 
     const addListeners = (function() {
         const tiles = document.querySelectorAll(".tile");

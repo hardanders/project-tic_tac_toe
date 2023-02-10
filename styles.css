@@ -43,8 +43,7 @@ body {
     max-height: 4rem;
 }
 
-.playBtn:hover,
-.submit:hover {
+button:hover {
     cursor: pointer;
 }
 
@@ -127,8 +126,8 @@ body {
 }
 
 .tile {
-    height: 8rem;
-    width: 8rem;
+    height: 10rem;
+    width: 10rem;
     background-color:darkseagreen;
     border: 2px solid gray;
 
@@ -136,8 +135,9 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-size: 11rem;
+    font-size: 9rem;
     color: white;
+    line-height: 5rem;
 }
 
 #p1Score,
