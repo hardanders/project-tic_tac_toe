@@ -8,8 +8,6 @@ const DomVariables = (function(){
     const gameSpace = document.querySelector(".gameSpace");
     const p1Score = document.querySelector('#p1Score');
     const p2Score = document.querySelector('#p2Score');
-    const p1Name = document.querySelector('#p1Name').value;
-    const p2Name = document.querySelector('#p2Name').value;
     const playBtn = document.querySelector(".playBtn");
     const submitBtn = document.querySelector('.submit');
     const playAIBtn = document.querySelector(".playAIBtn");
@@ -19,8 +17,6 @@ const DomVariables = (function(){
         gameSpace,
         p1Score,
         p2Score,
-        p1Name,
-        p2Name,
         playBtn,
         submitBtn,
         playAIBtn,
@@ -32,16 +28,20 @@ const DomVariables = (function(){
 
 const Gameboard = (function() {
     const Player = (name, icon) => {
-        name = (() => {
-            if (player1 == undefined && !name) {
-                return "Player 1";
-            } else if (player2 != undefined && !name) {
-                return "Player 2";
+        name = function() {
+            if (name == '' || name == undefined) {
+                if (!player1) {
+                    name = "Player 1";
+                    return name;
+                } else if (!player2) {
+                    name = "Player 2";
+                    return name;
+                };
             } else {
                 return name;
-            }
-        })();
-        let moves = [];
+            };
+        }();
+        const moves = [];
 
         return { name, icon, moves };
     };
@@ -103,8 +103,10 @@ const Gameboard = (function() {
     };
 
     const assignPlayer = () => {
-        player1 = Player(DomVariables.p1Name, 'X');
-        player2 = Player(DomVariables.p2Name, 'O');
+        const p1Name = document.querySelector('#p1Name').value;
+        const p2Name = document.querySelector('#p2Name').value;
+        player1 = Player(p1Name, 'X');
+        player2 = Player(p2Name, 'O');
         changePlayer();
         generateBoard();
         setNameDisplay();
