@@ -1,11 +1,41 @@
 let player1, player2, currentPlayer, winner;
 
+let moveVal = [];
+
+const DomVariables = (function(){
+    const gameSelect = document.querySelector(".gameSelect");
+    const inputCon = document.querySelector(".input-con");
+    const gameSpace = document.querySelector(".gameSpace");
+    const p1Score = document.querySelector('#p1Score');
+    const p2Score = document.querySelector('#p2Score');
+    const p1Name = document.querySelector('#p1Name').value;
+    const p2Name = document.querySelector('#p2Name').value;
+    const playBtn = document.querySelector(".playBtn");
+    const submitBtn = document.querySelector('.submit');
+    const playAIBtn = document.querySelector(".playAIBtn");
+    const restartBtn = document.querySelector('.restart');
+
+    return {
+        gameSpace,
+        p1Score,
+        p2Score,
+        p1Name,
+        p2Name,
+        playBtn,
+        submitBtn,
+        playAIBtn,
+        restartBtn,
+        inputCon,
+        gameSelect,
+    }
+})();
+
 const Gameboard = (function() {
     const Player = (name, icon) => {
         name = (() => {
             if (player1 == undefined && !name) {
                 return "Player 1";
-            } else if (player1 != undefined && !name) {
+            } else if (player2 != undefined && !name) {
                 return "Player 2";
             } else {
                 return name;
@@ -17,7 +47,9 @@ const Gameboard = (function() {
     };
     
     const determineWinner = () => {
-        let moves = Array(currentPlayer.moves);
+        const tiles = document.querySelectorAll('.tile');
+        const filledTile = [];
+        const moves = currentPlayer.moves;
         const winConditions = [
                 ["a0", "a1", "a2"],
                 ["a3", "a4", "a5"],
@@ -28,43 +60,59 @@ const Gameboard = (function() {
                 ["a0", "a4", "a8"],
                 ["a2", "a4", "a6"]
             ];
+        tiles.forEach((tile) => {
+            if (tile.textContent != '') {
+                filledTile.push(tile.classList[1]);
+            };
+            if (filledTile.length == 9) {
+                DisplayController.setWinner();
+            };
+        });
+
         winConditions.forEach((condition) => {
-            if (condition.toString() == moves.toString()) {
+            for (let i = 0; i < moves.length; i++) {
+                if (condition.includes(moves[i])) {
+                    moveVal.push(moves[i]);
+                };
+            };
+            if (moveVal.toString() == condition.toString() 
+                && 
+                filledTile.length < 9) {
                 winner = currentPlayer;
+                DisplayController.setWinner();
             }
+            moveVal = [];
         });
     };
 
     const changePlayer = () => {
-        const p1Score = document.querySelector('#p1Score')
-        const p2Score = document.querySelector('#p2Score')
-        if (currentPlayer == undefined) {
+        if (winner) {
+            return;
+        } else if (currentPlayer == undefined) {
             currentPlayer = player1;
-            p1Score.classList.toggle('highlight');
+            DomVariables.p1Score.classList.toggle('highlight');
         } else if (currentPlayer == player1){
             currentPlayer = player2;
-            p1Score.classList.toggle('highlight');
-            p2Score.classList.toggle('highlight');
+            DomVariables.p1Score.classList.toggle('highlight');
+            DomVariables.p2Score.classList.toggle('highlight');
         } else if (currentPlayer == player2) {
             currentPlayer = player1;
-            p2Score.classList.toggle('highlight');
-            p1Score.classList.toggle('highlight')
-        }
+            DomVariables.p2Score.classList.toggle('highlight');
+            DomVariables.p1Score.classList.toggle('highlight')
+        };
     };
 
     const assignPlayer = () => {
-        const p1Name = document.querySelector('#p1Name').value;
-        const p2Name = document.querySelector('#p2Name').value;
-        player1 = Player(p1Name, 'X');
-        player2 = Player(p2Name, 'O');
+        player1 = Player(DomVariables.p1Name, 'X');
+        player2 = Player(DomVariables.p2Name, 'O');
         changePlayer();
         generateBoard();
         setNameDisplay();
     };
 
     const setNameDisplay = () => {
-        document.querySelector("#p1Score").textContent = `${player1.name} : ${player1.icon}`;
-        document.querySelector("#p2Score").textContent = `${player2.name} : ${player2.icon}`;
+        DomVariables.p1Score.textContent = `${player1.name} : ${player1.icon}`;
+        DomVariables.p2Score.textContent = `${player2.name} : ${player2.icon}`;
     };
 
     const generateBoard = () => {
@@ -82,27 +130,28 @@ const Gameboard = (function() {
     return {
         assignPlayer,
         changePlayer,
-        determineWinner
+        determineWinner,
+        Player,
     };
 })();
 
 const DisplayController = (function() {
 
     const toggleHeader = (function() {
-        document.querySelector(".gameSelect").classList.toggle('hidden');
+        DomVariables.gameSelect.classList.toggle('hidden');
     });
 
     const toggleInputs = (function() {
-        document.querySelector(".input-con").classList.toggle('hidden');
+        DomVariables.inputCon.classList.toggle('hidden');
     });
 
     const toggleGamespace = (function() {
-        document.querySelector(".gameSpace").classList.toggle('hidden');
+        DomVariables.gameSpace.classList.toggle('hidden');
     });
 
     const inputIcon = (e) => {
-        let movesMade = e.target.classList[1]
-        if (e.target.innerHTML != '') {
+        let movesMade = e.target.classList[1];
+        if (e.target.innerHTML != '' || winner) {
             return;
         } else {
             e.target.innerHTML = currentPlayer.icon;
@@ -114,29 +163,32 @@ const DisplayController = (function() {
     };
 
     const setWinner = () => {
+        let newDiv = document.createElement('div');
         if (winner) {
-            
+            newDiv.classList = 'won';
+            newDiv.innerHTML = `${winner.name} WINS!`;
+            DomVariables.gameSpace.append(newDiv);
+        } else {
+            newDiv.classList = 'won';
+            newDiv.innerHTML = "It's a draw!";
+            DomVariables.gameSpace.append(newDiv);
         }
-    }
+    };
 
     const addListeners = (function() {
         const tiles = document.querySelectorAll(".tile");
-        const playBtn = document.querySelector(".playBtn");
-        const submitBtn = document.querySelector('.submit');
-        playBtn.addEventListener("click", function() {
+        DomVariables.playBtn.addEventListener("click", function() {
             toggleHeader();
             toggleInputs();
         });
-
-        const playAIBtn = document.querySelector(".playAIBtn");
-
-        for (i = 0; i < tiles.length; i++) {
-            tiles[i].addEventListener("click", function(e) {
+        
+        tiles.forEach((tile) => {
+            tile.addEventListener("click", function(e) {
                 inputIcon(e);
             });
-        };
+        });
 
-        submitBtn.addEventListener('click', function(e) {
+        DomVariables.submitBtn.addEventListener('click', function(e) {
             Gameboard.assignPlayer();
             toggleInputs();
             toggleGamespace();
@@ -145,6 +197,27 @@ const DisplayController = (function() {
         });
     });
     return {
-        addListeners
+        addListeners,
+        setWinner
     }
 })();
+
+
+/*if (condition.toString() == moves.toString()) {
+    winner = currentPlayer;
+    DisplayController.setWinner();
+};
+});*/
+
+
+/*moves.forEach((move) => {
+    if (condition[0].includes(move)) {
+        moveVal.push(move);
+    }
+});
+if (moveVal == condition[0]) {
+    winner = currentPlayer;
+    DisplayController.setWinner();
+} else {
+    moveVal = [];
+}; */

@@ -137,7 +137,6 @@ button:hover {
 
     font-size: 9rem;
     color: white;
-    line-height: 5rem;
 }
 
 #p1Score,
@@ -160,4 +159,15 @@ input[type="text"] {
     height: 2rem;
     width: 12rem;
     font-size: 1.75rem;
+}
+
+.won {
+    z-index: 4;
+    color: red;
+    font-size: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 40vh;
 }
