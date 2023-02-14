@@ -26,22 +26,22 @@
         <div class="names">
             <div class="input-div">
                 <label for="p1Name">Player 1:</label>
-                <input type="text" id="p1Name" name="p1Name">
+                <input type="text" id="p1Name" name="p1Name" placeholder="Player 1">
             </div>
             <div class="input-div">
                 <label for="p2Name">Player 2:</label>
-                <input type="text" id="p2Name" name="p2Name">
+                <input type="text" id="p2Name" name="p2Name" placeholder="Player 2">
             </div>
         </div>
         <button onclick="" class="submit">SUBMIT!</button>
     </form>
     <div class="gameSpace hidden" class="">
         <div class="playerDisplay">
-            <div id="p1Score"></div>
+            <div id="p1Score" class="highlight"></div>
             <div id="p2Score"></div>
         </div>
         <div class="grid"></div>
-        <button class="restart">Restart?</button>
+        <button onclick="DisplayController.reset()" class="restart">Restart?</button>
     </div>
 </body>
 </html>
